@@ -1,604 +1,73 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="fa">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام اقتصادی بازی</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <style>
-        :root {
-            --primary: #3498db;
-            --secondary: #2ecc71;
-            --danger: #e74c3c;
-            --dark: #2c3e50;
-            --light: #ecf0f1;
-            --purple: #9b59b6;
-        }
-        
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        h1, h2, h3 {
-            color: white;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        h1 {
-            font-size: 2.5rem;
-            background: linear-gradient(to right, #fbc531, #e84118);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--primary);
-        }
-        
-        .page {
-            display: none;
-        }
-        
-        .page.active {
-            display: block;
-            animation: fadeIn 0.5s ease-in-out;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-        
-        input {
-            width: 100%;
-            padding: 12px 15px;
-            border: none;
-            border-radius: 8px;
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-        
-        input:focus {
-            outline: none;
-            background-color: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.5);
-        }
-        
-        input::placeholder {
-            color: rgba(255, 255, 255, 0.6);
-        }
-        
-        button {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: all 0.3s;
-            width: 100%;
-            margin-top: 10px;
-        }
-        
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        button:active {
-            transform: translateY(0);
-        }
-        
-        .btn-success {
-            background-color: var(--secondary);
-        }
-        
-        .btn-danger {
-            background-color: var(--danger);
-        }
-        
-        .btn-purple {
-            background-color: var(--purple);
-        }
-        
-        .message {
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 8px;
-            text-align: center;
-            display: none;
-            animation: fadeIn 0.3s ease-in-out;
-        }
-        
-        .message.success {
-            background-color: rgba(46, 204, 113, 0.2);
-            border: 1px solid var(--secondary);
-            color: white;
-            display: block;
-        }
-        
-        .message.error {
-            background-color: rgba(231, 76, 60, 0.2);
-            border: 1px solid var(--danger);
-            color: white;
-            display: block;
-        }
-        
-        .tabs {
-            display: flex;
-            margin-bottom: 20px;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .tab-btn {
-            padding: 12px 20px;
-            cursor: pointer;
-            background: none;
-            border: none;
-            color: white;
-            font-weight: bold;
-            position: relative;
-            transition: all 0.3s;
-        }
-        
-        .tab-btn.active {
-            color: var(--primary);
-        }
-        
-        .tab-btn.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background-color: var(--primary);
-        }
-        
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.5s ease-in-out;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .user-info {
-            background-color: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .user-info span {
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-        
-        .balance {
-            color: #fbc531;
-            font-size: 1.5rem;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        
-        th, td {
-            padding: 12px 15px;
-            text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        th {
-            background-color: rgba(255, 255, 255, 0.2);
-            font-weight: bold;
-        }
-        
-        tr:last-child td {
-            border-bottom: none;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            animation: fadeIn 0.3s ease-in-out;
-        }
-        
-        .modal-content {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            padding: 30px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            position: relative;
-        }
-        
-        .close {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            font-size: 24px;
-            cursor: pointer;
-            color: white;
-        }
-        
-        .success-animation {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 100px;
-            color: var(--secondary);
-            z-index: 1001;
-            display: none;
-            text-shadow: 0 0 20px rgba(46, 204, 113, 0.7);
-        }
-        
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
-            
-            h1 {
-                font-size: 1.8rem;
-            }
-            
-            .user-info {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .user-info span {
-                margin-bottom: 10px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>پلتفرم بازی</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/lottie-web@5.9.6/build/player/lottie.min.js"></script>
 </head>
-<body>
-    <div class="container">
-        <!-- صفحه احراز هویت -->
-        <div id="auth-page" class="page active">
-            <h1>نظام اقتصادی بازی</h1>
-            
-            <div class="form-group">
-                <label for="username">نام کاربری</label>
-                <input type="text" id="username" placeholder="نام کاربری خود را وارد کنید">
-            </div>
-            
-            <div class="form-group">
-                <label for="password">رمز عبور</label>
-                <input type="password" id="password" placeholder="رمز عبور خود را وارد کنید">
-            </div>
-            
-            <button id="login-btn" class="btn-success">ورود</button>
-            <button id="register-btn">ثبت نام</button>
-            
-            <div id="auth-message" class="message"></div>
-        </div>
-        
-        <!-- صفحه اصلی -->
-        <div id="main-page" class="page">
-            <div class="user-info">
-                <span>کاربر: <span id="current-user"></span></span>
-                <span>موجودی: <span id="user-balance" class="balance">0</span> دلار</span>
-            </div>
-            
-            <button id="logout-btn" class="btn-danger">خروج</button>
-            <button id="admin-btn" class="btn-purple">پنل مدیریت</button>
-            
-            <div class="tabs">
-                <button class="tab-btn active" data-tab="license">فعال سازی لایسنس</button>
-                <button class="tab-btn" data-tab="transfer">انتقال دلار</button>
-                <button class="tab-btn" data-tab="leaderboard">جدول برترین‌ها</button>
-            </div>
-            
-            <!-- تب فعال سازی لایسنس -->
-            <div id="license-tab" class="tab-content active">
-                <div class="form-group">
-                    <label for="license-code">کد لایسنس ۱۶ رقمی</label>
-                    <input type="text" id="license-code" placeholder="XXXX-XXXX-XXXX-XXXX">
-                </div>
-                
-                <button id="activate-btn" class="btn-success">فعال سازی لایسنس</button>
-                
-                <div id="license-message" class="message"></div>
-            </div>
-            
-            <!-- تب انتقال دلار -->
-            <div id="transfer-tab" class="tab-content">
-                <div class="form-group">
-                    <label for="receiver">نام کاربری گیرنده</label>
-                    <input type="text" id="receiver" placeholder="نام کاربری گیرنده را وارد کنید">
-                </div>
-                
-                <div class="form-group">
-                    <label for="amount">مقدار دلار</label>
-                    <input type="number" id="amount" placeholder="مقدار را وارد کنید">
-                </div>
-                
-                <button id="transfer-btn">انتقال دلار</button>
-                
-                <div id="transfer-message" class="message"></div>
-            </div>
-            
-            <!-- تب جدول برترین‌ها -->
-            <div id="leaderboard-tab" class="tab-content">
-                <h3>۱۰ کاربر برتر</h3>
-                
-                <table>
-                    <thead>
-                        <tr>
-                            <th>رتبه</th>
-                            <th>نام کاربری</th>
-                            <th>موجودی (دلار)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="leaderboard-body"></tbody>
-                </table>
-            </div>
-        </div>
+<body class="bg-gray-900 text-white flex flex-col items-center min-h-screen font-sans">
+  <div id="auth" class="w-full max-w-md p-6 bg-gray-800 rounded-lg shadow-lg mt-10">
+    <h2 class="text-2xl text-center mb-4">ثبت‌نام / ورود</h2>
+    <div id="signup" class="mb-4">
+      <input type="text" id="signupName" placeholder="نام" class="w-full p-2 mb-2 bg-gray-700 rounded text-white">
+      <input type="password" id="signupPassword" placeholder="رمز" class="w-full p-2 mb-2 bg-gray-700 rounded text-white">
+      <button onclick="signup()" class="w-full p-2 bg-blue-600 rounded hover:bg-blue-700">ثبت‌نام</button>
     </div>
-    
-    <!-- مودال مدیریت -->
-    <div id="admin-modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>ورود به پنل مدیریت</h2>
-            
-            <div class="form-group">
-                <label for="admin-password">رمز مدیریت</label>
-                <input type="password" id="admin-password" placeholder="رمز مدیریت را وارد کنید">
-            </div>
-            
-            <button id="admin-login-btn">ورود به پنل</button>
-            
-            <div id="admin-message" class="message"></div>
-        </div>
+    <div id="login">
+      <input type="text" id="loginName" placeholder="نام" class="w-full p-2 mb-2 bg-gray-700 rounded text-white">
+      <input type="password" id="loginPassword" placeholder="رمز" class="w-full p-2 mb-2 bg-gray-700 rounded text-white">
+      <button onclick="login()" class="w-full p-2 bg-green-600 rounded hover:bg-green-700">ورود</button>
     </div>
-    
-    <!-- انیمیشن موفقیت -->
-    <div id="success-animation" class="success-animation"></div>
-    
-    <script>
-        // پایگاه داده در localStorage
-        const DB = {
-            users: JSON.parse(localStorage.getItem('users')) || [],
-            licenses: JSON.parse(localStorage.getItem('licenses')) || [],
-            transactions: JSON.parse(localStorage.getItem('transactions')) || [],
-            
-            save() {
-                localStorage.setItem('users', JSON.stringify(this.users));
-                localStorage.setItem('licenses', JSON.stringify(this.licenses));
-                localStorage.setItem('transactions', JSON.stringify(this.transactions));
-            },
-            
-            // مدیریت کاربران
-            addUser(username, password) {
-                if (this.users.some(u => u.username === username)) {
-                    return false;
-                }
-                
-                this.users.push({
-                    username,
-                    password,
-                    balance: 0,
-                    createdAt: new Date().toISOString()
-                });
-                
-                this.save();
-                return true;
-            },
-            
-            getUser(username) {
-                return this.users.find(u => u.username === username);
-            },
-            
-            deleteUser(username) {
-                this.users = this.users.filter(u => u.username !== username);
-                this.save();
-            },
-            
-            // مدیریت لایسنس‌ها
-            addLicense(code, value) {
-                this.licenses.push({
-                    code,
-                    value,
-                    used: false,
-                    usedBy: null,
-                    createdAt: new Date().toISOString()
-                });
-                
-                this.save();
-            },
-            
-            useLicense(code, username) {
-                // اعتبارسنجی فرمت کد
-                if (!/^\d{4}-\d{4}-\d{4}-\d{4}$/.test(code)) {
-                    return false;
-                }
+  </div>
 
-                const license = this.licenses.find(l => l.code === code);
-                
-                if (!license || license.used) {
-                    return false;
-                }
-                
-                license.used = true;
-                license.usedBy = username;
-                license.usedAt = new Date().toISOString();
-                
-                const user = this.getUser(username);
-                if (user) {
-                    user.balance += license.value;
-                }
-                
-                this.transactions.push({
-                    type: 'license',
-                    from: 'system',
-                    to: username,
-                    amount: license.value,
-                    createdAt: new Date().toISOString()
-                });
-                
-                this.save();
-                return true;
-            },
-            
-            // مدیریت تراکنش‌ها
-            transfer(from, to, amount) {
-                const fromUser = this.getUser(from);
-                const toUser = this.getUser(to);
-                
-                if (!fromUser || !toUser || fromUser.balance < amount || amount <= 0) {
-                    return false;
-                }
-                
-                fromUser.balance -= amount;
-                toUser.balance += amount;
-                
-                this.transactions.push({
-                    type: 'transfer',
-                    from,
-                    to,
-                    amount,
-                    createdAt: new Date().toISOString()
-                });
-                
-                this.save();
-                return true;
-            },
-            
-            // لیست برترین‌ها
-            getLeaderboard() {
-                return [...this.users]
-                    .sort((a, b) => b.balance - a.balance)
-                    .slice(0, 10);
-            },
-            
-            // تولید کد لایسنس ۱۶ رقمی
-            generateLicenseCode() {
-                let code = '';
-                const segments = 4;
-                const segmentLength = 4;
-                
-                for (let i = 0; i < segments; i++) {
-                    for (let j = 0; j < segmentLength; j++) {
-                        code += Math.floor(Math.random() * 10);
-                    }
-                    
-                    if (i < segments - 1) {
-                        code += '-';
-                    }
-                }
-                
-                // بررسی یکتا بودن کد
-                while (this.licenses.some(license => license.code === code)) {
-                    code = this.generateLicenseCode();
-                }
-                
-                return code;
-            },
-            
-            // تولید و ذخیره کد لایسنس جدید
-            generateAndSaveLicense(value) {
-                const code = this.generateLicenseCode();
-                this.addLicense(code, value);
-                return code;
-            }
-        };
+  <div id="dashboard" class="hidden w-full max-w-4xl p-6 bg-gray-800 rounded-lg shadow-lg mt-10">
+    <h2 class="text-2xl text-center mb-4">پنل کاربری</h2>
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <h3 class="text-lg mb-2">وارد کردن کد لایسنس</h3>
+        <input type="text" id="licenseCode" placeholder="کد لایسنس" class="w-full p-2 mb-2 bg-gray-700 rounded text-white">
+        <button onclick="redeemCode()" class="w-full p-2 bg-purple-600 rounded hover:bg-purple-700">فعال‌سازی</button>
+      </div>
+      <div>
+        <h3 class="text-lg mb-2">انتقال دلار</h3>
+        <input type="text" id="transferName" placeholder="نام مقصد" class="w-full p-2 mb-2 bg-gray-700 rounded text-white">
+        <input type="number" id="transferAmount" placeholder="مقدار دلار" class="w-full p-2 mb-2 bg-gray-700 rounded text-white">
+        <button onclick="transfer()" class="w-full p-2 bg-yellow-600 rounded hover:bg-yellow-700">انتقال</button>
+      </div>
+    </div>
+    <div class="mt-6">
+      <h3 class="text-lg mb-2">جدول امتیازات</h3>
+      <table class="w-full text-center bg-gray-700 rounded">
+        <thead>
+          <tr>
+            <th class="p-2">رتبه</th>
+            <th class="p-2">نام</th>
+            <th class="p-2">دلار</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboard"></tbody>
+      </table>
+    </div>
+    <button onclick="showAdminPanel()" class="mt-4 p-2 bg-red-600 rounded hover:bg-red-700">پنل مدیریت</button>
+  </div>
 
-        // مدیریت رابط کاربری
-        const UI = {
-            init() {
-                this.authPage = document.getElementById('auth-page');
-                this.mainPage = document.getElementById('main-page');
-                this.usernameInput = document.getElementById('username');
-                this.passwordInput = document.getElementById('password');
-                this.loginBtn = document.getElementById('login-btn');
-                this.registerBtn = document.getElementById('register-btn');
-                this.authMessage = document.getElementById('auth-message');
-                this.currentUserSpan = document.getElementById('current-user');
-                this.userBalanceSpan = document.getElementById('user-balance');
-                this.logoutBtn = document.getElementById('logout-btn');
-                this.licenseCodeInput = document.getElementById('license-code');
-                this.activateBtn = document.getElementById('activate-btn');
-                this.licenseMessage = document.getElementById('license-message');
-                this.receiverInput = document.getElementById('receiver');
-                this.amountInput = document.getElementById('amount');
-                this.transferBtn = document.getElementById('transfer-btn');
-                this.transferMessage = document.getElementById('transfer-message');
-                this.leaderboardTable = document.getElementById('leaderboard-body');
-                this.adminBtn = document.getElementById('admin-btn');
-                this.adminModal = document.getElementById('admin-modal');
-                this.adminPasswordInput = document.getElementById('admin-password');
-                this.adminLoginBtn = document.getElementById('admin-login-btn');
-                this.adminMessage = document.getElementById('admin-message');
-                this.closeModalBtn = document.querySelector('.close');
-                this.successAnimation = document.getElementById('success-animation');
-                
-                this.setupEventListeners();
-                this.checkAuth();
-            },
-            
-            setupEventListeners() {
-                this.loginBtn.addEventListener('click', () => this.login());
-                this.registerBtn.addEventListener('click', () => this.register());
-                this.logoutBtn.addEventListener('click', () => this.logout());
-                this.activateBtn.addEventListener('click', () => this.activateLicense());
-                this.transferBtn.addEventListener('click', () => this.transferMoney());
-                this.adminBtn.addEventListener('click', () => this.showAdminModal());
-                this.adminLoginBtn.addEventListener('click', () => this.adminLogin()
+  <div id="adminPanel" class="hidden w-full max-w-md p-6 bg-gray-800 rounded-lg shadow-lg mt-10">
+    <h2 class="text-2xl text-center mb-4">پنل مدیریت</h2>
+    <input type="password" id="adminPassword" placeholder="رمز مدیریت" class="w-full p-2 mb-2 bg-gray-700 rounded text-white">
+    <button onclick="loginAdmin()" class="w-full p-2 bg-red-600 rounded hover:bg-red-700">ورود</button>
+    <div id="adminControls" class="hidden mt-4">
+      <h3 class="text-lg mb-2">ساخت کد لایسنس</h3>
+      <input type="number" id="licenseAmount" placeholder="مقدار دلار" class="w-full p-2 mb-2 bg-gray-700 rounded text-white">
+      <button onclick="createLicense()" class="w-full p-2 bg-blue-600 rounded hover:bg-blue-700">ایجاد کد</button>
+      <h3 class="text-lg mt-4 mb-2">حذف کاربر</h3>
+      <input type="text" id="deleteUserName" placeholder="نام کاربر" class="w-full p-2 mb-2 bg-gray-700 rounded text-white">
+      <button onclick="deleteUser()" class="w-full p-2 bg-red-600 rounded hover:bg-red-700">حذف</button>
+    </div>
+  </div>
+
+  <div id="animationContainer" class="hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
